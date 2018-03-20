@@ -18,13 +18,9 @@ package main
 
 import (
 	"flag"
-	"path/filepath"
-
 	"github.com/golang/glog"
 	"github.com/spf13/pflag"
 	"k8s.io/code-generator/cmd/informer-gen/generators"
-	"k8s.io/code-generator/pkg/util"
-	"k8s.io/gengo/args"
 
 	generatorargs "k8s.io/code-generator/cmd/informer-gen/args"
 )
@@ -33,8 +29,6 @@ func main() {
 	genericArgs, customArgs := generatorargs.NewDefaults()
 
 	// Override defaults.
-	// TODO: move out of informer-gen
-	genericArgs.GoHeaderFilePath = filepath.Join(args.DefaultSourceTree(), util.BoilerplatePath())
 	genericArgs.OutputPackagePath = "k8s.io/kubernetes/pkg/client/informers/informers_generated"
 	customArgs.VersionedClientSetPackage = "k8s.io/kubernetes/pkg/client/clientset_generated/clientset"
 	customArgs.InternalClientSetPackage = "k8s.io/kubernetes/pkg/client/clientset_generated/internalclientset"
