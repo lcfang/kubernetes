@@ -23,6 +23,7 @@ import (
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
+	"k8s.io/apiserver/pkg/apis/apiserver"
 )
 
 func TestResourcePathWithPrefix(t *testing.T) {
@@ -183,7 +184,7 @@ func TestSelfLink(t *testing.T) {
 var status = &metav1.Status{
 	Status:  metav1.StatusFailure,
 	Code:    200,
-	Reason:  metav1.StatusReasonUnknown,
+	Reason:  apiserver.StatusReasonUnknown,
 	Message: "",
 }
 

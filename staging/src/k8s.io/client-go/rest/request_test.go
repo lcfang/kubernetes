@@ -50,6 +50,7 @@ import (
 	"k8s.io/apimachinery/pkg/util/httpstream"
 	"k8s.io/apimachinery/pkg/util/intstr"
 	"k8s.io/apimachinery/pkg/watch"
+	"k8s.io/apiserver/pkg/apis/apiserver"
 	"k8s.io/client-go/kubernetes/scheme"
 	restclientwatch "k8s.io/client-go/rest/watch"
 	"k8s.io/client-go/util/flowcontrol"
@@ -798,7 +799,7 @@ func TestRequestWatch(t *testing.T) {
 						StatusCode: http.StatusUnauthorized,
 						Body: ioutil.NopCloser(bytes.NewReader([]byte(runtime.EncodeOrDie(scheme.Codecs.LegacyCodec(v1.SchemeGroupVersion), &metav1.Status{
 							Status: metav1.StatusFailure,
-							Reason: metav1.StatusReasonUnauthorized,
+							Reason: apiserver.StatusReasonUnauthorized,
 						})))),
 					}, nil
 				}),
@@ -905,7 +906,7 @@ func TestRequestStream(t *testing.T) {
 						StatusCode: http.StatusUnauthorized,
 						Body: ioutil.NopCloser(bytes.NewReader([]byte(runtime.EncodeOrDie(scheme.Codecs.LegacyCodec(v1.SchemeGroupVersion), &metav1.Status{
 							Status: metav1.StatusFailure,
-							Reason: metav1.StatusReasonUnauthorized,
+							Reason: apiserver.StatusReasonUnauthorized,
 						})))),
 					}, nil
 				}),

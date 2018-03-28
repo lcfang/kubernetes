@@ -22,6 +22,7 @@ import (
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/watch"
+	"k8s.io/apiserver/pkg/apis/apiserver"
 )
 
 type decoratedWatcher struct {
@@ -87,7 +88,7 @@ func makeStatusErrorEvent(err error) watch.Event {
 		Status:  metav1.StatusFailure,
 		Message: err.Error(),
 		Code:    http.StatusInternalServerError,
-		Reason:  metav1.StatusReasonInternalError,
+		Reason:  apiserver.StatusReasonInternalError,
 	}
 	return watch.Event{
 		Type:   watch.Error,

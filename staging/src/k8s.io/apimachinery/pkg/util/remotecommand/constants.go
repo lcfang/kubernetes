@@ -20,6 +20,7 @@ import (
 	"time"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apiserver/pkg/apis/apiserver"
 )
 
 const (
@@ -46,7 +47,7 @@ const (
 	// adds support for exit codes.
 	StreamProtocolV4Name = "v4.channel.k8s.io"
 
-	NonZeroExitCodeReason = metav1.StatusReason("NonZeroExitCode")
+	NonZeroExitCodeReason = apiserver.StatusReason("NonZeroExitCode")
 	ExitCodeCauseType     = metav1.CauseType("ExitCode")
 )
 

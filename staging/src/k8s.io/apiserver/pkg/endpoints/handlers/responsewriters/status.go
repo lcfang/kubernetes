@@ -22,6 +22,7 @@ import (
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/runtime"
+	"k8s.io/apiserver/pkg/apis/apiserver"
 	"k8s.io/apiserver/pkg/storage"
 )
 
@@ -69,7 +70,7 @@ func ErrorToAPIStatus(err error) *metav1.Status {
 			},
 			Status:  metav1.StatusFailure,
 			Code:    int32(status),
-			Reason:  metav1.StatusReasonUnknown,
+			Reason:  apiserver.StatusReasonUnknown,
 			Message: err.Error(),
 		}
 	}

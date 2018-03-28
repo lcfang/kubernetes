@@ -43,6 +43,7 @@ import (
 	"k8s.io/apimachinery/pkg/util/strategicpatch"
 	"k8s.io/apimachinery/pkg/util/uuid"
 	"k8s.io/apimachinery/pkg/util/wait"
+	"k8s.io/apiserver/pkg/apis/apiserver"
 	"k8s.io/client-go/kubernetes/fake"
 	v1core "k8s.io/client-go/kubernetes/typed/core/v1"
 	"k8s.io/client-go/rest"
@@ -898,7 +899,7 @@ func TestRegisterWithApiServer(t *testing.T) {
 	kubeClient.AddReactor("create", "nodes", func(action core.Action) (bool, runtime.Object, error) {
 		// Return an error on create.
 		return true, &v1.Node{}, &apierrors.StatusError{
-			ErrStatus: metav1.Status{Reason: metav1.StatusReasonAlreadyExists},
+			ErrStatus: metav1.Status{Reason: apiserver.StatusReasonAlreadyExists},
 		}
 	})
 	kubeClient.AddReactor("get", "nodes", func(action core.Action) (bool, runtime.Object, error) {
@@ -959,11 +960,11 @@ func TestRegisterWithApiServer(t *testing.T) {
 
 func TestTryRegisterWithApiServer(t *testing.T) {
 	alreadyExists := &apierrors.StatusError{
-		ErrStatus: metav1.Status{Reason: metav1.StatusReasonAlreadyExists},
+		ErrStatus: metav1.Status{Reason: apiserver.StatusReasonAlreadyExists},
 	}
 
 	conflict := &apierrors.StatusError{
-		ErrStatus: metav1.Status{Reason: metav1.StatusReasonConflict},
+		ErrStatus: metav1.Status{Reason: apiserver.StatusReasonConflict},
 	}
 
 	newNode := func(cmad bool, externalID string) *v1.Node {

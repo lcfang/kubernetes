@@ -21,6 +21,7 @@ import (
 	"testing"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apiserver/pkg/apis/apiserver"
 )
 
 func TestToStatusErr(t *testing.T) {
@@ -46,7 +47,7 @@ func TestToStatusErr(t *testing.T) {
 		{
 			"only reason",
 			&metav1.Status{
-				Reason: metav1.StatusReasonForbidden,
+				Reason: apiserver.StatusReasonForbidden,
 			},
 			deniedBy + ": Forbidden",
 		},
@@ -54,7 +55,7 @@ func TestToStatusErr(t *testing.T) {
 			"message and reason",
 			&metav1.Status{
 				Message: "you shall not pass",
-				Reason:  metav1.StatusReasonForbidden,
+				Reason:  apiserver.StatusReasonForbidden,
 			},
 			deniedBy + ": you shall not pass",
 		},

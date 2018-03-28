@@ -36,6 +36,7 @@ import (
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 	"k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/apimachinery/pkg/watch"
+	"k8s.io/apiserver/pkg/apis/apiserver"
 	"k8s.io/apiserver/pkg/features"
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
 	utiltrace "k8s.io/apiserver/pkg/util/trace"
@@ -748,7 +749,7 @@ func newErrWatcher(err error) *errWatcher {
 		errEvent.Object = &metav1.Status{
 			Status:  metav1.StatusFailure,
 			Message: err.Error(),
-			Reason:  metav1.StatusReasonInternalError,
+			Reason:  apiserver.StatusReasonInternalError,
 			Code:    http.StatusInternalServerError,
 		}
 	}

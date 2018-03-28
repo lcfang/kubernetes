@@ -26,6 +26,7 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/util/validation/field"
+	"k8s.io/apiserver/pkg/apis/apiserver"
 )
 
 func resource(resource string) schema.GroupResource {
@@ -38,53 +39,53 @@ func kind(kind string) schema.GroupKind {
 func TestErrorNew(t *testing.T) {
 	err := NewAlreadyExists(resource("tests"), "1")
 	if !IsAlreadyExists(err) {
-		t.Errorf("expected to be %s", metav1.StatusReasonAlreadyExists)
+		t.Errorf("expected to be %s", apiserver.StatusReasonAlreadyExists)
 	}
 	if IsConflict(err) {
-		t.Errorf("expected to not be %s", metav1.StatusReasonConflict)
+		t.Errorf("expected to not be %s", apiserver.StatusReasonConflict)
 	}
 	if IsNotFound(err) {
-		t.Errorf(fmt.Sprintf("expected to not be %s", metav1.StatusReasonNotFound))
+		t.Errorf(fmt.Sprintf("expected to not be %s", apiserver.StatusReasonNotFound))
 	}
 	if IsInvalid(err) {
-		t.Errorf("expected to not be %s", metav1.StatusReasonInvalid)
+		t.Errorf("expected to not be %s", apiserver.StatusReasonInvalid)
 	}
 	if IsBadRequest(err) {
-		t.Errorf("expected to not be %s", metav1.StatusReasonBadRequest)
+		t.Errorf("expected to not be %s", apiserver.StatusReasonBadRequest)
 	}
 	if IsForbidden(err) {
-		t.Errorf("expected to not be %s", metav1.StatusReasonForbidden)
+		t.Errorf("expected to not be %s", apiserver.StatusReasonForbidden)
 	}
 	if IsServerTimeout(err) {
-		t.Errorf("expected to not be %s", metav1.StatusReasonServerTimeout)
+		t.Errorf("expected to not be %s", apiserver.StatusReasonServerTimeout)
 	}
 	if IsMethodNotSupported(err) {
-		t.Errorf("expected to not be %s", metav1.StatusReasonMethodNotAllowed)
+		t.Errorf("expected to not be %s", apiserver.StatusReasonMethodNotAllowed)
 	}
 
 	if !IsConflict(NewConflict(resource("tests"), "2", errors.New("message"))) {
 		t.Errorf("expected to be conflict")
 	}
 	if !IsNotFound(NewNotFound(resource("tests"), "3")) {
-		t.Errorf("expected to be %s", metav1.StatusReasonNotFound)
+		t.Errorf("expected to be %s", apiserver.StatusReasonNotFound)
 	}
 	if !IsInvalid(NewInvalid(kind("Test"), "2", nil)) {
-		t.Errorf("expected to be %s", metav1.StatusReasonInvalid)
+		t.Errorf("expected to be %s", apiserver.StatusReasonInvalid)
 	}
 	if !IsBadRequest(NewBadRequest("reason")) {
-		t.Errorf("expected to be %s", metav1.StatusReasonBadRequest)
+		t.Errorf("expected to be %s", apiserver.StatusReasonBadRequest)
 	}
 	if !IsForbidden(NewForbidden(resource("tests"), "2", errors.New("reason"))) {
-		t.Errorf("expected to be %s", metav1.StatusReasonForbidden)
+		t.Errorf("expected to be %s", apiserver.StatusReasonForbidden)
 	}
 	if !IsUnauthorized(NewUnauthorized("reason")) {
-		t.Errorf("expected to be %s", metav1.StatusReasonUnauthorized)
+		t.Errorf("expected to be %s", apiserver.StatusReasonUnauthorized)
 	}
 	if !IsServerTimeout(NewServerTimeout(resource("tests"), "reason", 0)) {
-		t.Errorf("expected to be %s", metav1.StatusReasonServerTimeout)
+		t.Errorf("expected to be %s", apiserver.StatusReasonServerTimeout)
 	}
 	if !IsMethodNotSupported(NewMethodNotSupported(resource("foos"), "delete")) {
-		t.Errorf("expected to be %s", metav1.StatusReasonMethodNotAllowed)
+		t.Errorf("expected to be %s", apiserver.StatusReasonMethodNotAllowed)
 	}
 
 	if time, ok := SuggestsClientDelay(NewServerTimeout(resource("tests"), "doing something", 10)); time != 10 || !ok {
@@ -179,7 +180,7 @@ func TestNewInvalid(t *testing.T) {
 		expected.Causes[0].Message = vErr.ErrorBody()
 		err := NewInvalid(kind("Kind"), "name", field.ErrorList{vErr})
 		status := err.ErrStatus
-		if status.Code != 422 || status.Reason != metav1.StatusReasonInvalid {
+		if status.Code != 422 || status.Reason != apiserver.StatusReasonInvalid {
 			t.Errorf("%d: unexpected status: %#v", i, status)
 		}
 		if !reflect.DeepEqual(expected, status.Details) {
@@ -189,7 +190,7 @@ func TestNewInvalid(t *testing.T) {
 }
 
 func TestReasonForError(t *testing.T) {
-	if e, a := metav1.StatusReasonUnknown, ReasonForError(nil); e != a {
+	if e, a := apiserver.StatusReasonUnknown, ReasonForError(nil); e != a {
 		t.Errorf("unexpected reason type: %#v", a)
 	}
 }

@@ -56,6 +56,7 @@ import (
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/apiserver/pkg/admission"
+	"k8s.io/apiserver/pkg/apis/apiserver"
 	auditinternal "k8s.io/apiserver/pkg/apis/audit"
 	"k8s.io/apiserver/pkg/apis/example"
 	examplefuzzer "k8s.io/apiserver/pkg/apis/example/fuzzer"
@@ -3722,7 +3723,7 @@ func TestDelayReturnsError(t *testing.T) {
 	defer server.Close()
 
 	status := expectApiStatus(t, "DELETE", fmt.Sprintf("%s/"+prefix+"/"+testGroupVersion.Group+"/"+testGroupVersion.Version+"/namespaces/default/foo/bar", server.URL), nil, http.StatusConflict)
-	if status.Status != metav1.StatusFailure || status.Message == "" || status.Details == nil || status.Reason != metav1.StatusReasonAlreadyExists {
+	if status.Status != metav1.StatusFailure || status.Message == "" || status.Details == nil || status.Reason != apiserver.StatusReasonAlreadyExists {
 		t.Errorf("Unexpected status %#v", status)
 	}
 }
@@ -3751,7 +3752,7 @@ func TestWriteJSONDecodeError(t *testing.T) {
 	// still be an error object.  This seems ok, the alternative is to validate the object before
 	// encoding, but this really should never happen, so it's wasted compute for every API request.
 	status := expectApiStatus(t, "GET", server.URL, nil, http.StatusOK)
-	if status.Reason != metav1.StatusReasonUnknown {
+	if status.Reason != apiserver.StatusReasonUnknown {
 		t.Errorf("unexpected reason %#v", status)
 	}
 	if !strings.Contains(status.Message, "no kind is registered for the type endpoints.UnregisteredAPIObject") {
@@ -3805,7 +3806,7 @@ func TestCreateTimeout(t *testing.T) {
 		t.Errorf("unexpected error: %v", err)
 	}
 	itemOut := expectApiStatus(t, "POST", server.URL+"/"+prefix+"/"+testGroupVersion.Group+"/"+testGroupVersion.Version+"/namespaces/default/foo?timeout=4ms", data, http.StatusGatewayTimeout)
-	if itemOut.Status != metav1.StatusFailure || itemOut.Reason != metav1.StatusReasonTimeout {
+	if itemOut.Status != metav1.StatusFailure || itemOut.Reason != apiserver.StatusReasonTimeout {
 		t.Errorf("Unexpected status %#v", itemOut)
 	}
 }

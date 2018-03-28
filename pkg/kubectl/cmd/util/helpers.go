@@ -42,6 +42,7 @@ import (
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/apimachinery/pkg/util/strategicpatch"
 	"k8s.io/apimachinery/pkg/util/yaml"
+	"k8s.io/apiserver/pkg/apis/apiserver"
 	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/kubernetes/pkg/kubectl"
 	"k8s.io/kubernetes/pkg/kubectl/resource"
@@ -202,7 +203,7 @@ func StandardErrorMessage(err error) (string, bool) {
 	switch {
 	case isStatus:
 		switch s := status.Status(); {
-		case s.Reason == metav1.StatusReasonUnauthorized:
+		case s.Reason == apiserver.StatusReasonUnauthorized:
 			return fmt.Sprintf("error: You must be logged in to the server (%s)", s.Message), true
 		case len(s.Reason) > 0:
 			return fmt.Sprintf("Error from server (%s): %s", s.Reason, err.Error()), true

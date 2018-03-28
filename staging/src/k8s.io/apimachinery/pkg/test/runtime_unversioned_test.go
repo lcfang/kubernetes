@@ -27,13 +27,14 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
+	"k8s.io/apiserver/pkg/apis/apiserver"
 )
 
 func TestV1EncodeDecodeStatus(t *testing.T) {
 	status := &metav1.Status{
 		Status:  metav1.StatusFailure,
 		Code:    200,
-		Reason:  metav1.StatusReasonUnknown,
+		Reason:  apiserver.StatusReasonUnknown,
 		Message: "",
 	}
 
@@ -67,7 +68,7 @@ func TestExperimentalEncodeDecodeStatus(t *testing.T) {
 	status := &metav1.Status{
 		Status:  metav1.StatusFailure,
 		Code:    200,
-		Reason:  metav1.StatusReasonUnknown,
+		Reason:  apiserver.StatusReasonUnknown,
 		Message: "",
 	}
 	// TODO: caesarxuchao: use the testapi.Extensions.Codec() once the PR that

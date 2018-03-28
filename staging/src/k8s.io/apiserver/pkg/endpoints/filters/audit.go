@@ -27,6 +27,7 @@ import (
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
+	"k8s.io/apiserver/pkg/apis/apiserver"
 	auditinternal "k8s.io/apiserver/pkg/apis/audit"
 	"k8s.io/apiserver/pkg/audit"
 	"k8s.io/apiserver/pkg/audit/policy"
@@ -76,7 +77,7 @@ func WithAudit(handler http.Handler, requestContextMapper request.RequestContext
 				ev.ResponseStatus = &metav1.Status{
 					Code:    http.StatusInternalServerError,
 					Status:  metav1.StatusFailure,
-					Reason:  metav1.StatusReasonInternalError,
+					Reason:  apiserver.StatusReasonInternalError,
 					Message: fmt.Sprintf("APIServer panic'd: %v", r),
 				}
 				processAuditEvent(sink, ev, omitStages)

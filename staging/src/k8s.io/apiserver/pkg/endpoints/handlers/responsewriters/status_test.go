@@ -25,6 +25,7 @@ import (
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
+	"k8s.io/apiserver/pkg/apis/apiserver"
 )
 
 func TestAPIStatus(t *testing.T) {
@@ -32,7 +33,7 @@ func TestAPIStatus(t *testing.T) {
 		errors.NewNotFound(schema.GroupResource{Group: "legacy.kubernetes.io", Resource: "foos"}, "bar"): {
 			Status:  metav1.StatusFailure,
 			Code:    http.StatusNotFound,
-			Reason:  metav1.StatusReasonNotFound,
+			Reason:  apiserver.StatusReasonNotFound,
 			Message: "foos.legacy.kubernetes.io \"bar\" not found",
 			Details: &metav1.StatusDetails{
 				Group: "legacy.kubernetes.io",

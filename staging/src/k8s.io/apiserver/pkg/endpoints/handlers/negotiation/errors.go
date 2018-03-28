@@ -22,6 +22,7 @@ import (
 	"strings"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apiserver/pkg/apis/apiserver"
 )
 
 // errNotAcceptable indicates Accept negotiation has failed
@@ -41,7 +42,7 @@ func (e errNotAcceptable) Status() metav1.Status {
 	return metav1.Status{
 		Status:  metav1.StatusFailure,
 		Code:    http.StatusNotAcceptable,
-		Reason:  metav1.StatusReasonNotAcceptable,
+		Reason:  apiserver.StatusReasonNotAcceptable,
 		Message: e.Error(),
 	}
 }
@@ -63,7 +64,7 @@ func (e errUnsupportedMediaType) Status() metav1.Status {
 	return metav1.Status{
 		Status:  metav1.StatusFailure,
 		Code:    http.StatusUnsupportedMediaType,
-		Reason:  metav1.StatusReasonUnsupportedMediaType,
+		Reason:  apiserver.StatusReasonUnsupportedMediaType,
 		Message: e.Error(),
 	}
 }

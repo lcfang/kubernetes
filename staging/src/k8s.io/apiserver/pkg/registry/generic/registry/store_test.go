@@ -41,6 +41,7 @@ import (
 	"k8s.io/apimachinery/pkg/util/validation/field"
 	"k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/apimachinery/pkg/watch"
+	"k8s.io/apiserver/pkg/apis/apiserver"
 	"k8s.io/apiserver/pkg/apis/example"
 	examplev1 "k8s.io/apiserver/pkg/apis/example/v1"
 	genericapirequest "k8s.io/apiserver/pkg/endpoints/request"
@@ -538,7 +539,7 @@ func TestStoreCreateInitializedFailed(t *testing.T) {
 			t.Fatalf("unexpected event: %s %#v", event.Type, event.Object)
 		}
 		pod.Initializers.Pending = nil
-		pod.Initializers.Result = &metav1.Status{Status: metav1.StatusFailure, Code: 403, Reason: metav1.StatusReasonForbidden, Message: "induced failure"}
+		pod.Initializers.Result = &metav1.Status{Status: metav1.StatusFailure, Code: 403, Reason: apiserver.StatusReasonForbidden, Message: "induced failure"}
 		updated, _, err := registry.Update(ctx, podA.Name, rest.DefaultUpdatedObjectInfo(pod), rest.ValidateAllObjectFunc, rest.ValidateAllObjectUpdateFunc)
 		if err != nil {
 			t.Fatal(err)

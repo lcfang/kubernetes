@@ -28,6 +28,7 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 	"k8s.io/apimachinery/pkg/watch"
+	"k8s.io/apiserver/pkg/apis/apiserver"
 	"k8s.io/apiserver/pkg/storage"
 	etcdutil "k8s.io/apiserver/pkg/storage/etcd/util"
 
@@ -275,7 +276,7 @@ func (w *etcdWatcher) translate() {
 						Status:  metav1.StatusFailure,
 						Message: err.Error(),
 						Code:    http.StatusGone, // Gone
-						Reason:  metav1.StatusReasonExpired,
+						Reason:  apiserver.StatusReasonExpired,
 					}
 				// TODO: need to generate errors using api/errors which has a circular dependency on this package
 				//   no other way to inject errors
@@ -286,7 +287,7 @@ func (w *etcdWatcher) translate() {
 						Status:  metav1.StatusFailure,
 						Message: err.Error(),
 						Code:    http.StatusInternalServerError,
-						Reason:  metav1.StatusReasonInternalError,
+						Reason:  apiserver.StatusReasonInternalError,
 					}
 				}
 				w.emit(watch.Event{

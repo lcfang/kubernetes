@@ -31,6 +31,7 @@ import (
 	k8sruntime "k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/util/clock"
 	"k8s.io/apimachinery/pkg/util/strategicpatch"
+	"k8s.io/apiserver/pkg/apis/apiserver"
 	"k8s.io/client-go/kubernetes/scheme"
 	restclient "k8s.io/client-go/rest"
 	ref "k8s.io/client-go/tools/reference"
@@ -450,7 +451,7 @@ func TestUpdateExpiredEvent(t *testing.T) {
 			return nil, &errors.StatusError{
 				ErrStatus: metav1.Status{
 					Code:   http.StatusNotFound,
-					Reason: metav1.StatusReasonNotFound,
+					Reason: apiserver.StatusReasonNotFound,
 				}}
 		},
 		OnCreate: func(event *v1.Event) (*v1.Event, error) {

@@ -35,6 +35,7 @@ import (
 	"k8s.io/apimachinery/pkg/runtime/serializer"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/diff"
+	"k8s.io/apiserver/pkg/apis/apiserver"
 	"k8s.io/client-go/kubernetes/scheme"
 	utiltesting "k8s.io/client-go/util/testing"
 )
@@ -89,7 +90,7 @@ func TestDoRequestFailed(t *testing.T) {
 	status := &metav1.Status{
 		Code:    http.StatusNotFound,
 		Status:  metav1.StatusFailure,
-		Reason:  metav1.StatusReasonNotFound,
+		Reason:  apiserver.StatusReasonNotFound,
 		Message: " \"\" not found",
 		Details: &metav1.StatusDetails{},
 	}
@@ -124,7 +125,7 @@ func TestDoRawRequestFailed(t *testing.T) {
 	status := &metav1.Status{
 		Code:    http.StatusNotFound,
 		Status:  metav1.StatusFailure,
-		Reason:  metav1.StatusReasonNotFound,
+		Reason:  apiserver.StatusReasonNotFound,
 		Message: "the server could not find the requested resource",
 		Details: &metav1.StatusDetails{
 			Causes: []metav1.StatusCause{
